@@ -1,3 +1,4 @@
+import csv
 import random 
 import string 
 
@@ -7,20 +8,27 @@ class WordGuess:
         'm' : 6, 
         'h' : 4
     }
-    
+        
     def __init__(self, debug=False):
          # are we in debug mode?
         self.debug = debug
 
         # possible words, selected at random
-        self.words = {
-            'e' : ['dog','cat','bug','hat','cap','lit','kin','fan','fin','fun','tan','ten','tin','ton'],
-            'm' : ['plain','claim','brine','crime','alive','bride','skine','drive','slime','stein','jumpy'],
-            'h' : ['machiavellian','prestidigitation','plenipotentiary','quattuordecillion','magnanimous','unencumbered','bioluminescent','circumlocution']
-        }
+        # self.words = {
+        #     'e' : ['dog','cat','bug','hat','cap','lit','kin','fan','fin','fun','tan','ten','tin','ton'],
+        #     'm' : ['plain','claim','brine','crime','alive','bride','skine','drive','slime','stein','jumpy'],
+        #     'h' : ['machiavellian','prestidigitation','plenipotentiary','quattuordecillion','magnanimous','unencumbered','bioluminescent','circumlocution']
+        # }
 
         # ask the user to set the game mode
         self.mode = self.set_mode()
+
+        self.words = {}
+
+        with open("words.csv", "r") as csv_file:
+            reader = csv.reader(csv_file)
+            for line in reader:
+                self.words[line[0]] = line[1:]
 
         self.word = random.choice(self.words[self.mode]) # chosen word; players try to guess this
         self.guesses = self.tries[self.mode] # how many tries the player gets
@@ -112,4 +120,4 @@ class WordGuess:
             letter = input("\nPlease guess a letter! (a..z): ").lower()
         return letter 
 
-WordGuess()
+WordGuess(True)
